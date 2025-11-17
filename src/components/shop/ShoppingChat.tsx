@@ -110,15 +110,20 @@ export function ShoppingChat() {
     setIsLoading(true);
 
     try {
-      const formData = new FormData();
+      const payload: { message: string; sessionId?: string } = {
+        message: messageToSend,
+      };
+      
       if (sessionId) {
-        formData.append('sessionId', sessionId);
+        payload.sessionId = sessionId;
       }
-      formData.append('message', messageToSend);
 
       const response = await fetch(`${API_BASE}/api/chat/message`, {
         method: 'POST',
-        body: formData,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
       });
 
       if (!response.ok) {
