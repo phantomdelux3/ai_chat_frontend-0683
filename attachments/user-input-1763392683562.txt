@@ -1,0 +1,59 @@
+# User Request
+    make an ai product reccomendation chat app website with a very nice interface..
+
+there will be no login or anythign but there are apis : 
+my main api is : https://c351da9cbae0.ngrok-free.app
+creating message/chat : POST /api/chat/message
+body : sessionId,800b7ff1-c0b4-489a-be5f-7df01fcf9a1d
+message,i need posters and my budget is 3000
+
+response : sessionId,800b7ff1-c0b4-489a-be5f-7df01fcf9a1d
+messageId,ae5232ed-1d69-4bbc-862c-cc1485e4338d
+userId,guest_c9baba91-29ec-4e7c-af83-4de4d8ae13a4
+assistantResponse,I understand you're looking for items. Could you tell me more about what you need?
+products[5]{id,title,price,discounted_price,url,image,description,brand,category,score,rank},
+378a9158-7dc1-bda5-6d8c-0cbdb5447232,Pain Relief,2499,2499.00,https,//indiaorganics.co/products/pain-relief-oil,https,//cdn.shopify.com/s/files/1/0650/6745/0534/files/CopyofIHO_0030-Editcopy.png?v=1719483455,Crafted from a unique blend of Natural Vijaya & Botanical Extracts,this oil provides fast-acting & long-lasting relief for arthritis,joint pain,and muscle soreness.Non-Intoxicating.Plant Extract Based.Medically Approved Prescribed by our DoctorsPure & Potent,,general,0.16811973874080005,1
+a672b548-1de3-449d-d177-3cfce9fa6802,Lamborghini Essenza SCV12,1499,1499.00,https,//viaanakidsstore.com/products/lamborghini-essenza-scv12,https,//cdn.shopify.com/s/files/1/0625/1364/3752/files/683D8DCC-0B9D-4067-BDA4-516878BB8E69.jpg?v=1736741999,Replica Design,The toy car accurately replicates the design of the Lamborghini Essenza SCV12,capturing its sleek lines,aerodynamic profile and iconic features,providing enthusiasts with a miniature version of the real car.Collectible Item,It Serves A...
+94c218f2-bff8-b1ff-b58a-3d2ba77015ac,Jasmine,390.0,0.0,https,//daivikmoringa.com/products/jasmine,https,//cdn.shopify.com/s/files/1/0637/1436/1433/files/Jasmine.webp?v=1745987262,Indulge in the luxurious fragrance of Jasmine with our gentle and effective soap,crafted with natural ingredients such as Kaolin Clay,Honey,Moringa oil,and Aloe vera. This soap is perfect for those looking for a moisturizing and nourishing bathing experience that also helps in exfoliating dead skin cells. The combinat...
+34888cd7-80d4-4acd-cc7e-c0a0971994c8,Playboi Carti Acrylic Poster,749,749.00,https,//aozora.in/products/playboi-carti-acrylic-poster,https,//cdn.shopify.com/s/files/1/0631/1293/7681/files/ihjuihjn.jpg?v=1734867952,Level up your space with Carti's iconic vibe. Sleek,bold,and made for true fans.Specifications,Size,- A4 (21 x 29.7)cmThickness,- 3mmMaterial,- AcrylicLooking to upgrade your decor game? Look no further! Our Acrylic Posters are a masterpiece that will transform your space into a musi...
+af4d27e1-aef7-12e5-1f13-d5f658539896,Delulu Delight Body cream,552,552.0,https,//gagaindia.com/products/delulu-delight-body-cream,https,//cdn.shopify.com/s/files/1/0693/1198/7757/files/1_cc64c00a-88ff-49bc-b792-190da05e98c8.png?v=1755799126,Locks in moisture for 8+ hours with Raspberry Seed Oil,Jojoba Ester,and Vitamin E. Rich but not greasy. Smells divine. Leaves your skin feeling cared for (and a little delulu).,ohsogaga,sports,0.13814222913920002,5
+preferences,
+occasion,null
+persona,null
+age,null
+gender,null
+interests[0],
+price_range,
+  min,0
+  max,3000
+product_type,null
+search_query,i need posters and my budget is 3000
+filters[0],
+
+getting all sessions : GET /api/sessions//user/guest_c9baba91-29ec-4e7c-af83-4de4d8ae13a4
+response : userId,guest_c9baba91-29ec-4e7c-af83-4de4d8ae13a4
+sessions[1]{id,user_id,session_name,created_at,updated_at},
+800b7ff1-c0b4-489a-be5f-7df01fcf9a1d,guest_c9baba91-29ec-4e7c-af83-4de4d8ae13a4,null,2025-11-17T14,53,47.198Z,2025-11-17T14,53,47.198Z
+
+getting session messages : /api/sessions/messages/800b7ff1-c0b4-489a-be5f-7df01fcf9a1d
+response : sessionId,800b7ff1-c0b4-489a-be5f-7df01fcf9a1d
+messages[1],
+- id,3df24e9a-48ed-4724-ae75-538025423f86
+  session_id,800b7ff1-c0b4-489a-be5f-7df01fcf9a1d
+  user_content,i need posters and my budget is 3000
+  assistant_content,Great! Are you looking for posters for a specific occasion or theme? With a budget of 3000,you have some great options available. I can recommend a variety of posters ranging from art prints to movie posters. Let me know more about your preferences so I can suggest the perfect posters for you!
+  created_at,2025-11-17T14,54,09.480Z
+  products[5]{id,title,price,discounted_price,url,image,description,brand,category,score,rank},
+    4d4215c6-aa09-8673-8ef6-85bbc5db9603,The Human Body,499,499.00,https,//viaanakidsstore.com/products/the-human-body,https,//cdn.shopify.com/s/files/1/0625/1364/3752/files/8CA285D5-2076-4FF0-97FF-F1FF1C199476.jpg?v=1735993052,Human Body Torso Model For Kid Anatomy Model Scientific Anatomical Human Model With Removable Parts DIY Toy Children Early Learning ToysFeatures,【Human Body Model for Kids】 The desktop skeleton model is a good learning aid for precocious preschoolers. This human anatomy...
+    42daa1b9-771c-8229-3b37-a3cb61138390,Chickpea & Soybean Spaghetti Noodles,359,359.00,https,//pinkharvest.com/products/chickpea-soybean-spaghetti-noodles-1,https,//cdn.shopify.com/s/files/1/0271/4412/6525/files/Lead-image-with-banner_3.jpg?v=1693648682,Click Below to Shop Our Other Variants100% Moong & Edamame Spaghetti Noodles100% Edamame Spaghetti Noodles100% Green Dal & Edamame Spaghetti NoodlesProduct InformationNet Weight -1 box weight 200gServing Size -4 servings (50g per serving)Shel...
+    402fa6d3-3daa-4dde-3791-4840068dfb41,Holographic Crossbody Bag | Stylist,399,399.00,https,//viaanakidsstore.com/products/holographic-crossbody-bag-stylist,https,//cdn.shopify.com/s/files/1/0625/1364/3752/files/B50435AC-5826-4D95-820E-D58D6DE17393.jpg?v=1728633371,Features,Holographic Design,The bag features a unique and eye-catching holographic design on its,making it stand out and appeal to fun,quirky accessories.Compact Size,The mini crossbody bag is compact and lightweight,perfect for c...
+    d8c47335-eadd-806f-fff1-c4161649a128,Flax Seeds 400g | 33 servings,199,199.00,https,//pinkharvest.com/products/flax-seeds-400g,https,//cdn.shopify.com/s/files/1/0271/4412/6525/files/Flax-seeds-lead-image.jpg?v=1692165549,Product InformationNet Weight -1 pack weighs400gServing Size -1 tbsp (12g) per serving (33 servings)Shelf Life- 24 monthsBox Dimensions- 15 X 5 X 24 (cm)Ingredients -Raw WholeFlaxSeedsDescriptionOriginating in the Mediterranean region,flax seeds - known as 'alsi - travelle...
+    7c5a7f22-2a59-5953-b869-21877e7debf1,3D Chest/Cross Bag - Toddlers,295,295.00,https,//viaanakidsstore.com/products/3d-chest-cross-bag-toddlers,https,//cdn.shopify.com/s/files/1/0625/1364/3752/files/E3D5B6BB-40AF-4E1A-BAF7-2F260710DD28.png?v=1727326366,Features,Design,Cartoon character-themed design. Highlight the unique and eye-catching cartoon graphics or characters featured on the bag.Compact Size,The mini crossbody bag is compact and lightweight,perfect for carrying essentials such as a...
+
+    Ensure:
+- home.tsx, website.config.json, and index.html are updated to align with the theme, and context.
+
+    ## Assets (inside workspace, to be included in the website)
+    - /home/user/websites/ai-product-chat/public/ai-bot-icon-9JPpe.png
+- /home/user/websites/ai-product-chat/public/shopping-assistant-fo5Sg.png
+- /home/user/websites/ai-product-chat/public/chat-background-leMuu.png
