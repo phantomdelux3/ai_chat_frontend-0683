@@ -32,28 +32,41 @@ export function SessionSidebar({
   const [sessions, setSessions] = useState<Session[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  const loadSessions = async (userIdToUse: string) => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(`${API_BASE}/api/sessions/user/${userIdToUse}`);
+      if (response.ok) {
+        const data = await response.json() as { sessions?: Session[] };
+        if (data && Array.isArray(data.sessions)) {
+          setSessions(data.sessions);
+        }
+      }
+    } catch (error) {
+      console.error('Failed to load sessions:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (!userId) return;
+    loadSessions(userId);
+  }, [userId]);
 
-    const loadSessions = async () => {
-      setIsLoading(true);
-      try {
-        const response = await fetch(`${API_BASE}/api/sessions/user/${userId}`);
-        if (response.ok) {
-          const data = await response.json() as { sessions?: Session[] };
-          if (data && Array.isArray(data.sessions)) {
-            setSessions(data.sessions);
-          }
-        }
-      } catch (error) {
-        console.error('Failed to load sessions:', error);
-      } finally {
-        setIsLoading(false);
+  useEffect(() => {
+    const handleRefresh = (event: CustomEvent) => {
+      const { userId: refreshUserId } = event.detail;
+      if (refreshUserId) {
+        loadSessions(refreshUserId);
       }
     };
 
-    loadSessions();
-  }, [userId]);
+    window.addEventListener('refresh-sessions', handleRefresh as EventListener);
+    return () => {
+      window.removeEventListener('refresh-sessions', handleRefresh as EventListener);
+    };
+  }, []);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);

@@ -102,6 +102,21 @@ export function ShoppingChat() {
     setShowFilters(true);
   };
 
+  const refreshSessions = async (userIdToUse: string) => {
+    try {
+      const response = await fetch(`${API_BASE}/api/sessions/user/${userIdToUse}`);
+      if (response.ok) {
+        window.dispatchEvent(new CustomEvent('refresh-sessions', { detail: { userId: userIdToUse } }));
+      }
+    } catch (error) {
+      console.error('Failed to refresh sessions:', error);
+    }
+  };
+
+  const extractUserId = (data: any): string | null => {
+    return data.userId || data.user_id || data.session?.user_id || null;
+  };
+
   const handleFilterComplete = async (message: string) => {
     setShowFilters(false);
     if (!message.trim()) return;
@@ -116,12 +131,16 @@ export function ShoppingChat() {
     setIsLoading(true);
 
     try {
-      const payload: { message: string; sessionId?: string } = {
+      const payload: { message: string; sessionId?: string; userId?: string } = {
         message: message,
       };
       
       if (sessionId) {
         payload.sessionId = sessionId;
+      }
+
+      if (userId) {
+        payload.userId = userId;
       }
 
       const response = await fetch(`${API_BASE}/api/chat/message`, {
@@ -139,17 +158,23 @@ export function ShoppingChat() {
       const data = await response.json() as {
         sessionId?: string;
         userId?: string;
+        user_id?: string;
         assistantResponse?: string;
         products?: Product[];
+        session?: { user_id?: string };
       };
 
       if (data.sessionId && !sessionId) {
         setSessionId(data.sessionId);
       }
 
-      if (data.userId && !userId) {
-        setUserId(data.userId);
-        localStorage.setItem('shop_user_id', data.userId);
+      const extractedUserId = extractUserId(data);
+      if (extractedUserId && !userId) {
+        setUserId(extractedUserId);
+        localStorage.setItem('shop_user_id', extractedUserId);
+        await refreshSessions(extractedUserId);
+      } else if (extractedUserId && userId) {
+        await refreshSessions(extractedUserId);
       }
 
       let assistantContent = 'I understand. How can I help you find products?';
@@ -198,12 +223,16 @@ export function ShoppingChat() {
     setIsLoading(true);
 
     try {
-      const payload: { message: string; sessionId?: string } = {
+      const payload: { message: string; sessionId?: string; userId?: string } = {
         message: messageToSend,
       };
       
       if (sessionId) {
         payload.sessionId = sessionId;
+      }
+
+      if (userId) {
+        payload.userId = userId;
       }
 
       const response = await fetch(`${API_BASE}/api/chat/message`, {
@@ -221,17 +250,23 @@ export function ShoppingChat() {
       const data = await response.json() as {
         sessionId?: string;
         userId?: string;
+        user_id?: string;
         assistantResponse?: string;
         products?: Product[];
+        session?: { user_id?: string };
       };
 
       if (data.sessionId && !sessionId) {
         setSessionId(data.sessionId);
       }
 
-      if (data.userId && !userId) {
-        setUserId(data.userId);
-        localStorage.setItem('shop_user_id', data.userId);
+      const extractedUserId = extractUserId(data);
+      if (extractedUserId && !userId) {
+        setUserId(extractedUserId);
+        localStorage.setItem('shop_user_id', extractedUserId);
+        await refreshSessions(extractedUserId);
+      } else if (extractedUserId && userId) {
+        await refreshSessions(extractedUserId);
       }
 
       let assistantContent = 'I understand. How can I help you find products?';
