@@ -6,8 +6,8 @@ import { ExternalLink, ChevronDown, ChevronUp } from 'lucide-react';
 interface Product {
   id: string;
   title: string;
-  price: number;
-  discounted_price: number;
+  price: number | string;
+  discounted_price: number | string;
   url: string;
   image: string;
   description: string;
@@ -24,11 +24,20 @@ interface ProductCardProps {
 export function ProductCard({ product }: ProductCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const formatPrice = (price: number) => {
-    return `₹${price.toFixed(2)}`;
+  const formatPrice = (price: number | string) => {
+    const numPrice = typeof price === 'string' ? parseFloat(price) : price;
+    if (isNaN(numPrice)) return '₹0.00';
+    return `₹${numPrice.toFixed(2)}`;
   };
 
-  const hasDiscount = product.discounted_price && product.discounted_price !== product.price;
+  const getPriceAsNumber = (price: number | string) => {
+    const numPrice = typeof price === 'string' ? parseFloat(price) : price;
+    return isNaN(numPrice) ? 0 : numPrice;
+  };
+
+  const hasDiscount = product.discounted_price && 
+    getPriceAsNumber(product.discounted_price) !== getPriceAsNumber(product.price) &&
+    getPriceAsNumber(product.discounted_price) > 0;
 
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow">

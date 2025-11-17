@@ -9,8 +9,8 @@ import { v4 as uuidv4 } from 'uuid';
 interface Product {
   id: string;
   title: string;
-  price: number;
-  discounted_price: number;
+  price: number | string;
+  discounted_price: number | string;
   url: string;
   image: string;
   description: string;
