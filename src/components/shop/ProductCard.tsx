@@ -51,59 +51,59 @@ export function ProductCard({ product }: ProductCardProps) {
           }}
         />
       </div>
-      <CardHeader className="space-y-3 pb-3">
-        <CardTitle className="text-base font-semibold line-clamp-2 leading-tight">
+      <CardHeader className="space-y-2 md:space-y-3 pb-2 md:pb-3 p-3 md:p-6">
+        <CardTitle className="text-sm md:text-base font-semibold line-clamp-2 leading-tight">
           {product.title}
         </CardTitle>
         <div className="flex items-center gap-2">
           {hasDiscount ? (
             <>
-              <span className="text-2xl font-bold text-primary">
+              <span className="text-xl md:text-2xl font-bold text-primary">
                 {formatPrice(product.discounted_price)}
               </span>
-              <span className="text-sm text-muted-foreground line-through">
+              <span className="text-xs md:text-sm text-muted-foreground line-through">
                 {formatPrice(product.price)}
               </span>
             </>
           ) : (
-            <span className="text-2xl font-bold text-primary">
+            <span className="text-xl md:text-2xl font-bold text-primary">
               {formatPrice(product.price)}
             </span>
           )}
         </div>
       </CardHeader>
-      <CardContent className="space-y-3 pt-0">
+      <CardContent className="space-y-3 pt-0 p-3 md:p-6 md:pt-0">
         {product.description && (
           <div>
             <button
               onClick={() => setIsExpanded(!isExpanded)}
-              className="flex items-center gap-1 text-sm font-medium text-foreground hover:text-primary transition-colors"
+              className="flex items-center gap-1 text-xs md:text-sm font-medium text-foreground hover:text-primary transition-colors py-1 min-h-[44px] md:min-h-0 -my-1 md:my-0"
             >
               {isExpanded ? (
                 <>
-                  Hide Details <ChevronUp className="w-4 h-4" />
+                  Hide Details <ChevronUp className="w-3 h-3 md:w-4 md:h-4" />
                 </>
               ) : (
                 <>
-                  Show Details <ChevronDown className="w-4 h-4" />
+                  Show Details <ChevronDown className="w-3 h-3 md:w-4 md:h-4" />
                 </>
               )}
             </button>
             {isExpanded && (
-              <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
+              <p className="text-xs md:text-sm text-muted-foreground mt-2 leading-relaxed">
                 {product.description}
               </p>
             )}
           </div>
         )}
         {product.brand && (
-          <div className="text-sm text-muted-foreground">
+          <div className="text-xs md:text-sm text-muted-foreground">
             Brand: <span className="font-medium text-foreground">{product.brand}</span>
           </div>
         )}
-        <Button asChild className="w-full">
+        <Button asChild className="w-full min-h-[44px] md:min-h-0 text-sm">
           <a href={product.url} target="_blank" rel="noopener noreferrer">
-            View Product <ExternalLink className="ml-2 h-4 w-4" />
+            View Product <ExternalLink className="ml-2 h-3 w-3 md:h-4 md:w-4" />
           </a>
         </Button>
       </CardContent>

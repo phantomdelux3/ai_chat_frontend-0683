@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { MessageSquare, Plus } from 'lucide-react';
+import { MessageSquare, Plus, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface Session {
@@ -15,6 +15,8 @@ interface SessionSidebarProps {
   currentSessionId: string | null;
   onSessionSelect: (sessionId: string) => void;
   onNewSession: () => void;
+  isOpen: boolean;
+  onClose: () => void;
 }
 
 const API_BASE = 'https://c351da9cbae0.ngrok-free.app';
@@ -24,6 +26,8 @@ export function SessionSidebar({
   currentSessionId,
   onSessionSelect,
   onNewSession,
+  isOpen,
+  onClose,
 }: SessionSidebarProps) {
   const [sessions, setSessions] = useState<Session[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -67,11 +71,27 @@ export function SessionSidebar({
   };
 
   return (
-    <div className="w-64 border-r bg-muted/30 flex flex-col h-full">
-      <div className="p-4 border-b">
-        <Button onClick={onNewSession} className="w-full" size="sm">
+    <aside
+      className={cn(
+        'fixed md:relative inset-y-0 left-0 z-50 w-72 md:w-64',
+        'border-r bg-background flex flex-col h-full',
+        'transform transition-transform duration-300 ease-in-out',
+        'md:translate-x-0',
+        isOpen ? 'translate-x-0' : '-translate-x-full'
+      )}
+    >
+      <div className="p-3 md:p-4 border-b flex items-center justify-between gap-2">
+        <Button onClick={onNewSession} className="flex-1" size="sm">
           <Plus className="w-4 h-4 mr-2" />
           New Chat
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={onClose}
+          className="md:hidden h-9 w-9"
+        >
+          <X className="w-5 h-5" />
         </Button>
       </div>
 
@@ -82,7 +102,7 @@ export function SessionSidebar({
               Loading sessions...
             </div>
           ) : sessions.length === 0 ? (
-            <div className="text-sm text-muted-foreground text-center py-8">
+            <div className="text-sm text-muted-foreground text-center py-8 px-4">
               No sessions yet
             </div>
           ) : (
@@ -91,8 +111,8 @@ export function SessionSidebar({
                 key={session.id}
                 onClick={() => onSessionSelect(session.id)}
                 className={cn(
-                  'w-full text-left px-3 py-2 rounded-lg transition-colors',
-                  'hover:bg-muted flex items-center gap-2',
+                  'w-full text-left px-3 py-2.5 md:py-2 rounded-lg transition-colors',
+                  'hover:bg-muted flex items-center gap-2 min-h-[44px] md:min-h-0',
                   currentSessionId === session.id && 'bg-muted'
                 )}
               >
@@ -110,6 +130,6 @@ export function SessionSidebar({
           )}
         </div>
       </ScrollArea>
-    </div>
+    </aside>
   );
 }

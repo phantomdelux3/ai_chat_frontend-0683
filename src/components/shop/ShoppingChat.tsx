@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ProductCard } from './ProductCard';
 import { SessionSidebar } from './SessionSidebar';
-import { Send, Bot, User } from 'lucide-react';
+import { Send, Bot, User, Menu } from 'lucide-react';
 import { v4 as uuidv4 } from 'uuid';
 
 interface Product {
@@ -37,6 +37,7 @@ export function ShoppingChat() {
     return localStorage.getItem('shop_user_id');
   });
   const [sessionId, setSessionId] = useState<string | null>(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -88,11 +89,13 @@ export function ShoppingChat() {
   const handleSessionSelect = (selectedSessionId: string) => {
     setSessionId(selectedSessionId);
     loadSessionMessages(selectedSessionId);
+    setIsSidebarOpen(false);
   };
 
   const handleNewSession = () => {
     setSessionId(null);
     setMessages([]);
+    setIsSidebarOpen(false);
   };
 
   const handleSend = async () => {
@@ -185,22 +188,45 @@ export function ShoppingChat() {
   };
 
   return (
-    <div className="flex h-full">
+    <div className="flex h-full relative">
+      {isSidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-40 md:hidden"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+      
       <SessionSidebar
         userId={userId}
         currentSessionId={sessionId}
         onSessionSelect={handleSessionSelect}
         onNewSession={handleNewSession}
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
       />
       
-      <div className="flex-1 flex flex-col">
-        <div className="flex-1 overflow-y-auto p-6 space-y-6">
+      <div className="flex-1 flex flex-col min-w-0">
+        <div className="border-b bg-background md:hidden px-3 py-2 flex items-center gap-3">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setIsSidebarOpen(true)}
+            className="h-10 w-10"
+          >
+            <Menu className="w-5 h-5" />
+          </Button>
+          <h2 className="text-sm font-semibold truncate">
+            {sessionId ? `Session ${sessionId.substring(0, 8)}` : 'New Chat'}
+          </h2>
+        </div>
+
+        <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-4 md:space-y-6">
           {messages.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-full text-center space-y-4">
-              <img src="/ai-bot-icon-9JPpe.png" alt="AI Assistant" className="w-24 h-24 opacity-50" />
+            <div className="flex flex-col items-center justify-center h-full text-center space-y-4 px-4">
+              <img src="/ai-bot-icon-9JPpe.png" alt="AI Assistant" className="w-20 h-20 md:w-24 md:h-24 opacity-50" />
               <div className="space-y-2">
-                <h3 className="text-2xl font-semibold">Welcome to ShopAssist AI</h3>
-                <p className="text-muted-foreground max-w-md">
+                <h3 className="text-xl md:text-2xl font-semibold">Welcome to ShopAssist AI</h3>
+                <p className="text-sm md:text-base text-muted-foreground max-w-md">
                   I'm your personal shopping assistant. Tell me what you're looking for, 
                   your budget, and I'll help you find the perfect products!
                 </p>
@@ -210,37 +236,37 @@ export function ShoppingChat() {
             messages.map((message) => (
               <div key={message.id} className="space-y-4">
                 <div
-                  className={`flex gap-3 ${
+                  className={`flex gap-2 md:gap-3 ${
                     message.role === 'user' ? 'justify-end' : 'justify-start'
                   }`}
                 >
                   {message.role === 'assistant' && (
-                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                      <Bot className="w-5 h-5 text-primary" />
+                    <div className="flex-shrink-0 w-7 h-7 md:w-8 md:h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                      <Bot className="w-4 h-4 md:w-5 md:h-5 text-primary" />
                     </div>
                   )}
                   <div
-                    className={`max-w-[70%] rounded-2xl px-4 py-3 ${
+                    className={`max-w-[85%] md:max-w-[70%] rounded-2xl px-3 py-2 md:px-4 md:py-3 ${
                       message.role === 'user'
                         ? 'bg-primary text-primary-foreground'
                         : 'bg-muted'
                     }`}
                   >
-                    <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                    <p className="text-sm whitespace-pre-wrap break-words">{message.content}</p>
                   </div>
                   {message.role === 'user' && (
-                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                      <User className="w-5 h-5 text-primary" />
+                    <div className="flex-shrink-0 w-7 h-7 md:w-8 md:h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                      <User className="w-4 h-4 md:w-5 md:h-5 text-primary" />
                     </div>
                   )}
                 </div>
 
                 {message.products && message.products.length > 0 && (
-                  <div className="pl-11 space-y-3">
-                    <p className="text-sm font-medium text-muted-foreground">
+                  <div className="md:pl-11 space-y-3">
+                    <p className="text-xs md:text-sm font-medium text-muted-foreground">
                       Recommended Products ({message.products.length})
                     </p>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
                       {message.products.map((product) => (
                         <ProductCard key={product.id} product={product} />
                       ))}
@@ -253,7 +279,7 @@ export function ShoppingChat() {
           <div ref={messagesEndRef} />
         </div>
 
-        <div className="border-t bg-background p-4">
+        <div className="border-t bg-background p-3 md:p-4">
           <div className="max-w-4xl mx-auto flex gap-2">
             <Input
               value={input}
@@ -261,9 +287,14 @@ export function ShoppingChat() {
               onKeyPress={handleKeyPress}
               placeholder="What are you looking for today?"
               disabled={isLoading}
-              className="flex-1"
+              className="flex-1 h-10 md:h-11 text-sm md:text-base"
             />
-            <Button onClick={handleSend} disabled={isLoading || !input.trim()}>
+            <Button 
+              onClick={handleSend} 
+              disabled={isLoading || !input.trim()}
+              className="h-10 w-10 md:h-11 md:w-11"
+              size="icon"
+            >
               <Send className="w-4 h-4" />
             </Button>
           </div>
