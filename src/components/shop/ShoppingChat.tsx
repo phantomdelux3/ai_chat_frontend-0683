@@ -98,11 +98,6 @@ export function ShoppingChat() {
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
 
-    const currentSessionId = sessionId || uuidv4();
-    if (!sessionId) {
-      setSessionId(currentSessionId);
-    }
-
     const userMessage: Message = {
       id: uuidv4(),
       role: 'user',
@@ -110,13 +105,16 @@ export function ShoppingChat() {
     };
 
     setMessages((prev) => [...prev, userMessage]);
+    const messageToSend = input;
     setInput('');
     setIsLoading(true);
 
     try {
       const formData = new FormData();
-      formData.append('sessionId', currentSessionId);
-      formData.append('message', input);
+      if (sessionId) {
+        formData.append('sessionId', sessionId);
+      }
+      formData.append('message', messageToSend);
 
       const response = await fetch(`${API_BASE}/api/chat/message`, {
         method: 'POST',
@@ -128,10 +126,15 @@ export function ShoppingChat() {
       }
 
       const data = await response.json() as {
+        sessionId?: string;
         userId?: string;
         assistantResponse?: string;
         products?: Product[];
       };
+
+      if (data.sessionId && !sessionId) {
+        setSessionId(data.sessionId);
+      }
 
       if (data.userId && !userId) {
         setUserId(data.userId);

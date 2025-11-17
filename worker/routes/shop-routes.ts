@@ -6,7 +6,7 @@ import type { HonoContext } from '../types';
 const EXTERNAL_API_BASE = 'https://c351da9cbae0.ngrok-free.app';
 
 const createMessageSchema = z.object({
-  sessionId: z.string(),
+  sessionId: z.string().optional(),
   message: z.string(),
 });
 
@@ -19,7 +19,9 @@ export const shopRoutes = new Hono<HonoContext>()
         const { sessionId, message } = c.req.valid('json');
 
         const formData = new FormData();
-        formData.append('sessionId', sessionId);
+        if (sessionId) {
+          formData.append('sessionId', sessionId);
+        }
         formData.append('message', message);
 
         const response = await fetch(`${EXTERNAL_API_BASE}/api/chat/message`, {
