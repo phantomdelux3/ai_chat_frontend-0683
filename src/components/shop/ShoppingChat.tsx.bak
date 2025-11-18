@@ -29,7 +29,7 @@ interface Message {
   messageId?: string;
 }
 
-const API_BASE = 'https://4468a3289269.ngrok-free.app';
+const API_BASE = 'https://b4b7cd081fa7.ngrok-free.app';
 
 export function ShoppingChat() {
   const [showFilters, setShowFilters] = useState(true);

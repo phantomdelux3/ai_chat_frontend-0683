@@ -2,7 +2,7 @@
     make an ai product reccomendation chat app website with a very nice interface..
 
 there will be no login or anythign but there are apis : 
-my main api is : https://c351da9cbae0.ngrok-free.app
+my main api is : https://b4b7cd081fa7.ngrok-free.app 
 creating message/chat : POST /api/chat/message
 body : sessionId,800b7ff1-c0b4-489a-be5f-7df01fcf9a1d
 message,i need posters and my budget is 3000
